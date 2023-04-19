@@ -188,3 +188,21 @@ footer{
 .error{
   align-self: center;
 }
+
+@media (max-width: 500px) {
+
+  .hero_section {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    text-align: center;
+    padding: 0 1rem;
+  }
+}
+
+@media (max-width: 400px) {
+
+  .hero_section {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    text-align: center;
+    padding: 0 1rem;
+  }
+}
