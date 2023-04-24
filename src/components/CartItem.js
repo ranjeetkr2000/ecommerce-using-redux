@@ -9,7 +9,6 @@ class CartItem extends Component {
 
         this.state = {
             removeItem : false,
-            quantity: 1,
         }
     }
 
@@ -31,29 +30,16 @@ class CartItem extends Component {
 
     handlePlusClick = () => {
         this.props.incrementQuantity(this.props.item.id);
-        this.setState((prevState) => {
-            return {
-                ...prevState,
-                quantity: prevState.quantity + 1,
-            }
-        });
     }
 
     handleMinusClick = () => {
-
         this.props.decrementQuantity(this.props.item.id);
-        this.setState((prevState) => {
-            return {
-                ...prevState,
-                quantity: prevState.quantity - 1,
-            }
-        });
     }
 
     render() {
 
-        const { title, price, image} = this.props.item;
-        const { removeItem, quantity} = this.state;
+        const { title, price, image, quantity} = this.props.item;
+        const { removeItem} = this.state;
         return (
             <>
                 {!removeItem && (
@@ -64,7 +50,7 @@ class CartItem extends Component {
                             <div className="add_more">
                                 <button
                                     className="btns"
-                                    disabled={ this.state.quantity === 1? true : false}
+                                    disabled={ quantity === 1? true : false}
                                     onClick={this.handleMinusClick}
                                 >
                                     -
@@ -72,7 +58,7 @@ class CartItem extends Component {
                                 <span>{quantity}</span>
                                 <button
                                     className="btns"
-                                    disabled={ this.state.quantity === 5? true : false}
+                                    disabled={ quantity === 5? true : false}
                                     onClick={this.handlePlusClick}
                                 >
                                     +
