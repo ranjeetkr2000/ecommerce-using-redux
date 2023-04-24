@@ -10,6 +10,7 @@ class Header extends Component {
                 <nav className="navbar header_nav">
                     <NavLink to="/" >Home</NavLink>
                     <NavLink to="/add_product" >Add Product</NavLink>
+                    <NavLink to="/cart">Cart</NavLink>
                 </nav>
             </header>
         );

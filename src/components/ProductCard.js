@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+import { ADD_TO_CART, EDIT_PRODUCT, REMOVE_PRODUCT } from "../redux/actionTypes";
 
 class ProductCard extends Component {
 
@@ -8,6 +10,8 @@ class ProductCard extends Component {
 
         this.state = {
             confirmDelete: false,
+            alreadyInCart : false,
+            addedToCart: false,
         }
     }
 
@@ -22,13 +26,57 @@ class ProductCard extends Component {
     }
 
     handleDeleteYes = () => {
-        this.props.handleDelete(this.props.product);
+        this.props.removeProduct(this.props.product.id);
+
     }
 
     handleDeleteNo = () => {
         this.setState({
             confirmDelete: false,
         })
+    }
+
+    handleAddToCart = () => {
+        let ifItemExists =  this.props.cart.find((currItem) => {
+            return currItem.id === this.props.product.id;
+        });
+        
+        if(ifItemExists){
+            this.setState((prevState) => {
+                return {
+                    ...prevState,
+                    alreadyInCart: true,
+                }
+            })
+
+            setTimeout(() => {
+                this.setState((prevState) => {
+                    return {
+                        ...prevState,
+                        alreadyInCart: false,
+                    }
+                })
+            }, 1 * 1000);
+        } 
+        else {
+            this.props.addToCart(this.props.product);
+
+            this.setState((prevState) => {
+                return {
+                    ...prevState,
+                    addedToCart: true,
+                }
+            })
+
+            setTimeout(() => {
+                this.setState((prevState) => {
+                    return {
+                        ...prevState,
+                        addedToCart: false,
+                    }
+                })
+            }, 1 * 1000);
+        }
     }
 
     render() {
@@ -81,9 +129,47 @@ class ProductCard extends Component {
                         </Link>
                     </div>
                 </div>
+                <div className="add_cart_div">
+                    <button className="add_cart" onClick={this.handleAddToCart}>
+                            Add to Cart
+                    </button>
+                    {this.state.addedToCart && <small>Added To Cart</small>} 
+                    {this.state.alreadyInCart && <small>Already in cart</small>}
+                </div> 
             </div>
         );
     }
 }
 
-export default ProductCard;
+function mapStateToProps(state) {
+    return {
+        cart: state.cartReducer.cart,
+    }
+}
+
+function mapDispatchToProps(dispatch) {
+    return {
+        removeProduct : (productId) => {
+            dispatch({
+                type: REMOVE_PRODUCT,
+                payload : productId,
+            })
+        },
+
+        editProduct : (product) => {
+            dispatch({
+                type: EDIT_PRODUCT,
+                payload: product,
+            })
+        },
+
+        addToCart : (product) => {
+            dispatch({
+                type: ADD_TO_CART,
+                payload: product,
+            })
+        }
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ProductCard);

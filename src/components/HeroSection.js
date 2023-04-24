@@ -3,11 +3,12 @@ import Error from "./Error";
 import Loader from "./Loader";
 import ProductCard from "./ProductCard";
 
+import { connect } from "react-redux";
+
 class HeroSection extends Component {
     render() {
 
-        const {status, products, errorMsg, handleDelete, handleEdit} = this.props;
-
+        const {status, products, errorMsg, handleEdit} = this.props;
         return (
             <>
                 {status === "loading" && <Loader />}
@@ -26,9 +27,8 @@ class HeroSection extends Component {
                             return (
                                 <ProductCard 
                                     key={product.id} 
-                                    product={product} 
-                                    handleDelete={handleDelete}
-                                    handleEdit={handleEdit}
+                                    product={product}
+                                    handleEdit = {handleEdit}
                                 />
                             );
                     })}
@@ -38,4 +38,13 @@ class HeroSection extends Component {
     }
 }
 
-export default HeroSection;
+const mapStateToProps = (state) => {
+    
+    const { products} = state.productReducer;
+
+    return {
+        products,
+    }
+}
+
+export default connect(mapStateToProps)(HeroSection);

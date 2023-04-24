@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import validator from "validator";
 import Success from "./Success";
+import { connect } from "react-redux";
+import { ADD_PRODUCT } from "../redux/actionTypes";
 
 class AddProduct extends Component {
     constructor(props) {
@@ -45,7 +47,16 @@ class AddProduct extends Component {
                     isFormValid: true,
                 },
                 () => {
-                    this.props.addNewProduct(this.state);
+                    let {title, description, id, price, image} = this.state;
+                    let product = {
+                        title,
+                        description,
+                        id,
+                        price,
+                        image,
+                    }
+
+                    this.props.addProduct(product);
                 }
             );
         } else {
@@ -180,4 +191,15 @@ class AddProduct extends Component {
     }
 }
 
-export default AddProduct;
+function mapDispatchToProps(dispatch){
+    return {
+        addProduct: (product) => {
+            dispatch({
+                type : ADD_PRODUCT,
+                payload : product,
+            })
+        }
+    }
+}
+
+export default connect(null, mapDispatchToProps)(AddProduct);

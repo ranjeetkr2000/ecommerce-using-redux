@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import validator from "validator";
 import Success from "./Success";
+import { connect } from "react-redux";
+import { EDIT_PRODUCT } from "../redux/actionTypes";
 
 class EditProduct extends Component {
     constructor(props) {
@@ -42,7 +44,7 @@ class EditProduct extends Component {
                     isFormValid: true,
                 },
                 () => {
-                    this.props.handleUpdate(this.state.product);
+                    this.props.editProduct(this.state.product);
                 }
             );
         } else {
@@ -198,4 +200,15 @@ class EditProduct extends Component {
     }
 }
 
-export default EditProduct;
+function mapDispatchToProps(dispatch){
+    return {
+        editProduct : (product) => {
+            dispatch({
+                type: EDIT_PRODUCT,
+                payload : product,
+            })
+        }
+    }
+}
+
+export default connect(null, mapDispatchToProps)(EditProduct);
